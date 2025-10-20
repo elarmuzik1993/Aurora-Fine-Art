@@ -60,8 +60,8 @@ Startup Project/
 ## Contact
 
 For inquiries about Aurora Fine Art Services:
-- Email: privateclients@aurora-art.co.uk
-- Phone: +44 (0) 20 XXXX XXXX
+- Email: auroravkltd@live.co.uk
+- Phone: +44 7718 000632
 - Location: London, United Kingdom
 
 ---
