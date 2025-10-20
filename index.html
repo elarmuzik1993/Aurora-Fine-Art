@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora Fine Art Services - Global Precision. Family Care.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Minimal custom styles for animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="antialiased bg-white">
+    <div id="root"></div>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Reusable Button Component - Elegant design for luxury brand
+        const Button = ({ children, variant = 'primary', size = 'md', className = '', ...props }) => {
+            const baseStyles = 'inline-flex items-center justify-center font-medium tracking-wide transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2';
+
+            const variants = {
+                primary: 'bg-slate-900 text-white hover:bg-slate-800 focus:ring-slate-500 border border-slate-900',
+                secondary: 'bg-white text-slate-900 border-2 border-slate-200 hover:border-slate-900 hover:bg-slate-50 focus:ring-slate-300',
+                outline: 'border-2 border-white text-white hover:bg-white hover:text-slate-900 focus:ring-white'
+            };
+
+            const sizes = {
+                sm: 'px-5 py-2 text-sm',
+                md: 'px-7 py-3 text-base',
+                lg: 'px-10 py-4 text-base'
+            };
+
+            return (
+                <button className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`} {...props}>
+                    {children}
+                </button>
+            );
+        };
+
+        // Reusable Card Component
+        const Card = ({ children, className = '', hover = true }) => {
+            const hoverStyles = hover ? 'hover:shadow-xl transition-shadow' : '';
+            return (
+                <div className={`bg-white border border-slate-100 p-8 ${hoverStyles} duration-300 ${className}`}>
+                    {children}
+                </div>
+            );
+        };
+
+        // Section Wrapper Component
+        const Section = ({ children, className = '', id = '' }) => {
+            return (
+                <section id={id} className={`py-20 px-4 sm:px-6 lg:px-8 ${className}`}>
+                    <div className="max-w-7xl mx-auto">
+                        {children}
+                    </div>
+                </section>
+            );
+        };
+
+        // Navigation Component
+        const Navigation = () => {
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+            const [isScrolled, setIsScrolled] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => {
+                    setIsScrolled(window.scrollY > 20);
+                };
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const navLinks = [
+                { href: '#about', label: 'About' },
+                { href: '#services', label: 'Services' },
+                { href: '#commitment', label: 'Our Commitment' },
+                { href: '#contact', label: 'Contact' }
+            ];
+
+            return (
+                <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-sm' : 'bg-white'} border-b border-slate-100`}>
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between items-center h-20">
+                            {/* Logo */}
+                            <div className="flex items-center space-x-3">
+                                <div className="flex items-center justify-center">
+                                    <i data-lucide="sparkles" className="w-7 h-7 text-amber-600"></i>
+                                </div>
+                                <div>
+                                    <span className="text-2xl font-light tracking-tight text-slate-900">
+                                        Aurora
+                                    </span>
+                                    <p className="text-xs text-slate-500 tracking-wide">FINE ART SERVICES</p>
+                                </div>
+                            </div>
+
+                            {/* Desktop Navigation */}
+                            <div className="hidden md:flex items-center space-x-10">
+                                {navLinks.map((link) => (
+                                    <a
+                                        key={link.href}
+                                        href={link.href}
+                                        className="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors duration-200"
+                                    >
+                                        {link.label}
+                                    </a>
+                                ))}
+                                <Button size="sm">Request Consultation</Button>
+                            </div>
+
+                            {/* Mobile Menu Button */}
+                            <button
+                                className="md:hidden p-2 hover:bg-slate-50 transition-colors"
+                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                aria-label="Toggle menu"
+                                aria-expanded={isMenuOpen}
+                            >
+                                <i data-lucide={isMenuOpen ? 'x' : 'menu'} className="w-6 h-6 text-slate-700"></i>
+                            </button>
+                        </div>
+
+                        {/* Mobile Menu */}
+                        {isMenuOpen && (
+                            <div className="md:hidden py-4 border-t border-slate-100 animate-fade-in-up">
+                                <div className="flex flex-col space-y-4">
+                                    {navLinks.map((link) => (
+                                        <a
+                                            key={link.href}
+                                            href={link.href}
+                                            className="text-slate-600 hover:text-slate-900 font-medium transition-colors duration-200 py-2"
+                                            onClick={() => setIsMenuOpen(false)}
+                                        >
+                                            {link.label}
+                                        </a>
+                                    ))}
+                                    <Button className="w-full" size="sm">Request Consultation</Button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </nav>
+            );
+        };
+
+        // Hero Section
+        const Hero = () => {
+            return (
+                <Section className="pt-32 pb-24 bg-slate-50">
+                    <div className="grid lg:grid-cols-2 gap-16 items-center">
+                        <div className="space-y-8 animate-fade-in-up">
+                            <div>
+                                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light leading-tight text-slate-900 mb-6">
+                                    Aurora Fine Art Services
+                                </h1>
+                                <p className="text-2xl sm:text-3xl font-light text-slate-600 mb-2">
+                                    Global Precision.
+                                </p>
+                                <p className="text-2xl sm:text-3xl font-light text-slate-600">
+                                    Family Care.
+                                </p>
+                            </div>
+
+                            <div className="w-16 h-0.5 bg-amber-600"></div>
+
+                            <p className="text-lg text-slate-600 leading-relaxed">
+                                Aurora is London's premier fine art logistics partner. We provide comprehensive, museum-quality services
+                                for the world's most valuable collections.
+                            </p>
+
+                            <p className="text-lg text-slate-600 leading-relaxed">
+                                From secure global transportation and climate-controlled storage to complex museum installations, our service
+                                is built on two decades of experience, absolute discretion, and the accountability only a family-owned business can provide.
+                            </p>
+
+                            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                                <Button size="lg">
+                                    Request a Confidential Consultation
+                                </Button>
+                                <Button variant="secondary" size="lg">
+                                    Explore Our Services
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* Hero Image Placeholder */}
+                        <div className="relative animate-fade-in-up" style={{animationDelay: '0.2s'}}>
+                            <div className="relative bg-slate-200 aspect-[4/5] flex items-center justify-center border border-slate-300">
+                                {/* Placeholder for hero image: crated painting being handled */}
+                                <div className="text-center text-slate-500 space-y-3 p-8">
+                                    <i data-lucide="package" className="w-20 h-20 mx-auto opacity-40"></i>
+                                    <p className="text-sm">Hero Image: Uniformed professionals handling a crated painting<br/>in a clean, modern warehouse</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Section>
+            );
+        };
+
+        // About Section
+        const About = () => {
+            return (
+                <Section id="about" className="bg-white">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="text-center mb-12">
+                            <h2 className="text-4xl sm:text-5xl font-light text-slate-900 mb-4">
+                                Our Story: From a Single Van to a Global Standard
+                            </h2>
+                            <div className="w-16 h-0.5 bg-amber-600 mx-auto mt-6"></div>
+                        </div>
+
+                        <div className="space-y-6 text-lg text-slate-600 leading-relaxed">
+                            <p>
+                                Founded in London in the early 2000s, Aurora began as a father-and-son residential moving company with a single van
+                                and a commitment to meticulous care. Our reputation for reliability and precision quickly grew, and clients began
+                                entrusting us with their most valuable possessions: their art collections.
+                            </p>
+
+                            <p>
+                                Recognising the unique demands of the art world, we dedicated ourselves to mastering the complex field of fine art logistics.
+                            </p>
+
+                            <p>
+                                Today, Aurora is a global leader, trusted by international museums, discerning private collectors, galleries, and artist estates.
+                                While our operations now span continents, our core philosophy remains unchanged. We are still a family business, and we treat every
+                                piece with the personal accountability and uncompromising standards that defined our very first job.
+                            </p>
+
+                            <div className="bg-slate-50 border-l-4 border-amber-600 p-6 mt-8">
+                                <p className="font-medium text-slate-900 text-xl mb-2">Our Mission</p>
+                                <p className="text-slate-700">
+                                    To be the world's most trusted guardian for fine art and cultural assets, ensuring their preservation and safe passage.
+                                    We combine the precision of global logistics with the personal integrity of a family legacy.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </Section>
+            );
+        };
+
+        // Services Section
+        const Services = () => {
+            const services = [
+                {
+                    icon: 'truck',
+                    title: 'Fine Art Transportation',
+                    intro: 'We manage secure logistics for art, from a single piece to a touring exhibition.',
+                    details: [
+                        'Specialised Fleet: GPS-tracked, climate-controlled, and high-security vehicles throughout the UK and Europe.',
+                        'Global Freight: Seamless, end-to-end air and sea freight forwarding, including customs brokerage.',
+                        'Airport Supervision: Tarmac supervision for high-value shipments, ensuring safe handling from aircraft to vehicle.'
+                    ]
+                },
+                {
+                    icon: 'warehouse',
+                    title: 'Secure Art Storage',
+                    intro: 'Our facilities are purpose-built fortresses designed exclusively for fine art.',
+                    details: [
+                        'London Flagship Facility: Discreet, high-security location with biometric access and 24/7/365 surveillance.',
+                        'Climate Control: Multiple independently-managed zones for different material requirements.',
+                        'Private Viewing Rooms: Secure, beautifully lit rooms to view, photograph, or show works from your collection.'
+                    ]
+                },
+                {
+                    icon: 'building',
+                    title: 'Museum & Gallery Services',
+                    intro: 'We are the trusted partner for London\'s leading institutions.',
+                    details: [
+                        'Installation & De-installation: Expert handling of complex, large-scale, and fragile installations.',
+                        'Project Management: Complete logistical planning for major exhibitions, including multi-venue tours.'
+                    ]
+                },
+                {
+                    icon: 'package',
+                    title: 'Custom Crating & Packing',
+                    intro: 'Protection is paramount. We build bespoke, museum-grade solutions in-house.',
+                    details: [
+                        'Master Carpenters: Custom crates tailored to the exact specifications of each piece.',
+                        'Archival Materials: Highest-quality, chemically-inert materials for long-term preservation.'
+                    ]
+                }
+            ];
+
+            return (
+                <Section id="services" className="bg-slate-50">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl sm:text-5xl font-light text-slate-900 mb-4">
+                            Comprehensive Fine Art Solutions
+                        </h2>
+                        <div className="w-16 h-0.5 bg-amber-600 mx-auto mt-6 mb-6"></div>
+                        <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+                            Aurora provides a complete, discreet, and secure solution for the entire lifecycle of your collection.
+                            Our in-house, highly trained technicians manage every detail.
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-8">
+                        {services.map((service, index) => (
+                            <Card key={index} className="hover:border-amber-600">
+                                <div className="flex items-start space-x-4 mb-6">
+                                    <div className="w-12 h-12 bg-amber-600 flex items-center justify-center flex-shrink-0">
+                                        <i data-lucide={service.icon} className="w-6 h-6 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-2xl font-light text-slate-900 mb-2">{service.title}</h3>
+                                        <p className="text-slate-600 leading-relaxed">{service.intro}</p>
+                                    </div>
+                                </div>
+                                <ul className="space-y-3 pl-16">
+                                    {service.details.map((detail, i) => (
+                                        <li key={i} className="text-slate-600 text-sm leading-relaxed">
+                                            {detail}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </Card>
+                        ))}
+                    </div>
+                </Section>
+            );
+        };
+
+        // Commitment Section (Why Choose Us)
+        const Commitment = () => {
+            const commitments = [
+                {
+                    icon: 'shield',
+                    title: 'Uncompromising Security',
+                    description: 'Discretion is the foundation of our business. All staff are full-time, extensively vetted, and bound by strict confidentiality agreements. Our facilities and vehicles represent the industry\'s highest security standards.'
+                },
+                {
+                    icon: 'award',
+                    title: 'Technical Expertise',
+                    description: 'Our team members are not movers; they are art handlers. They receive continuous, rigorous training in conservation-safe techniques for all media, from Old Master paintings to contemporary installations.'
+                },
+                {
+                    icon: 'heart',
+                    title: 'A Legacy of Trust',
+                    description: 'As a family-owned business, our reputation is personal. We provide a level of accountability and direct access that large conglomerates cannot. When you partner with Aurora, you partner with a family dedicated to protecting yours.'
+                },
+                {
+                    icon: 'globe',
+                    title: 'Global Reach, Personal Service',
+                    description: 'While our capabilities are global, our service is bespoke. You will have a single, dedicated account manager who understands your collection and requirements, providing clear communication and seamless project management.'
+                }
+            ];
+
+            return (
+                <Section id="commitment" className="bg-white">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl sm:text-5xl font-light text-slate-900 mb-4">
+                            The Aurora Standard
+                        </h2>
+                        <div className="w-16 h-0.5 bg-amber-600 mx-auto mt-6 mb-6"></div>
+                        <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+                            We understand that we are not just moving objects; we are protecting cultural and financial legacies.
+                            Our commitment is absolute.
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+                        {commitments.map((commitment, index) => (
+                            <div key={index} className="flex space-x-6">
+                                <div className="flex-shrink-0">
+                                    <div className="w-14 h-14 border-2 border-amber-600 flex items-center justify-center">
+                                        <i data-lucide={commitment.icon} className="w-7 h-7 text-amber-600"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-medium text-slate-900 mb-3">{commitment.title}</h3>
+                                    <p className="text-slate-600 leading-relaxed">{commitment.description}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Section>
+            );
+        };
+
+        // Contact Section
+        const Contact = () => {
+            const [formData, setFormData] = useState({
+                name: '',
+                email: '',
+                message: ''
+            });
+            const [errors, setErrors] = useState({});
+
+            const handleChange = (e) => {
+                setFormData({
+                    ...formData,
+                    [e.target.name]: e.target.value
+                });
+                // Clear error when user starts typing
+                if (errors[e.target.name]) {
+                    setErrors({
+                        ...errors,
+                        [e.target.name]: ''
+                    });
+                }
+            };
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                const newErrors = {};
+
+                if (!formData.name.trim()) {
+                    newErrors.name = 'Name is required';
+                }
+                if (!formData.email.trim()) {
+                    newErrors.email = 'Email is required';
+                } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+                    newErrors.email = 'Please enter a valid email address';
+                }
+                if (!formData.message.trim()) {
+                    newErrors.message = 'Message is required';
+                }
+
+                if (Object.keys(newErrors).length > 0) {
+                    setErrors(newErrors);
+                    return;
+                }
+
+                alert('Thank you for your inquiry. Our team will contact you shortly.');
+                setFormData({ name: '', email: '', message: '' });
+            };
+
+            return (
+                <Section id="contact" className="bg-slate-50">
+                    <div className="max-w-5xl mx-auto">
+                        <div className="text-center mb-12">
+                            <h2 className="text-4xl sm:text-5xl font-light text-slate-900 mb-4">
+                                Contact Our Team
+                            </h2>
+                            <div className="w-16 h-0.5 bg-amber-600 mx-auto mt-6 mb-6"></div>
+                            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+                                For a confidential discussion about your collection management, transportation, or storage needs,
+                                please contact our London headquarters.
+                            </p>
+                            <p className="text-slate-600 mt-4">
+                                Our specialists are available to conduct on-site assessments and provide detailed, bespoke proposals.
+                            </p>
+                        </div>
+
+                        <div className="grid lg:grid-cols-2 gap-12">
+                            {/* Contact Information */}
+                            <div className="space-y-8">
+                                <div>
+                                    <h3 className="text-xl font-medium text-slate-900 mb-6">Get in Touch</h3>
+                                    <div className="space-y-4">
+                                        <div className="flex items-start space-x-4">
+                                            <i data-lucide="phone" className="w-5 h-5 text-amber-600 mt-1"></i>
+                                            <div>
+                                                <p className="text-sm text-slate-500 mb-1">Phone</p>
+                                                <p className="text-slate-900">+44 (0) 20 XXXX XXXX</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start space-x-4">
+                                            <i data-lucide="mail" className="w-5 h-5 text-amber-600 mt-1"></i>
+                                            <div>
+                                                <p className="text-sm text-slate-500 mb-1">Email</p>
+                                                <p className="text-slate-900">privateclients@aurora-art.co.uk</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start space-x-4">
+                                            <i data-lucide="map-pin" className="w-5 h-5 text-amber-600 mt-1"></i>
+                                            <div>
+                                                <p className="text-sm text-slate-500 mb-1">London Headquarters</p>
+                                                <p className="text-slate-900">Confidential Location<br/>London, United Kingdom</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white border border-slate-200 p-6">
+                                    <p className="text-sm text-slate-600 leading-relaxed">
+                                        All inquiries are treated with the utmost confidentiality. Our team operates under strict
+                                        non-disclosure agreements to protect the privacy of our clients and their collections.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Contact Form */}
+                            <div>
+                                <h3 className="text-xl font-medium text-slate-900 mb-6">Send us a Message</h3>
+                                <form onSubmit={handleSubmit} className="space-y-6">
+                                    <div>
+                                        <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
+                                            Name *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="name"
+                                            name="name"
+                                            value={formData.name}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-3 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                                            aria-invalid={errors.name ? 'true' : 'false'}
+                                        />
+                                        {errors.name && (
+                                            <p className="mt-1 text-sm text-red-600" role="alert">{errors.name}</p>
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
+                                            Email *
+                                        </label>
+                                        <input
+                                            type="email"
+                                            id="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-3 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                                            aria-invalid={errors.email ? 'true' : 'false'}
+                                        />
+                                        {errors.email && (
+                                            <p className="mt-1 text-sm text-red-600" role="alert">{errors.email}</p>
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="message" className="block text-sm font-medium text-slate-700 mb-2">
+                                            Message *
+                                        </label>
+                                        <textarea
+                                            id="message"
+                                            name="message"
+                                            value={formData.message}
+                                            onChange={handleChange}
+                                            rows="5"
+                                            className="w-full px-4 py-3 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
+                                            aria-invalid={errors.message ? 'true' : 'false'}
+                                        ></textarea>
+                                        {errors.message && (
+                                            <p className="mt-1 text-sm text-red-600" role="alert">{errors.message}</p>
+                                        )}
+                                    </div>
+
+                                    <Button type="submit" variant="primary" className="w-full">
+                                        Send Message
+                                    </Button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </Section>
+            );
+        };
+
+        // Footer Component
+        const Footer = () => {
+            const footerLinks = {
+                Services: [
+                    { label: 'Fine Art Transportation', href: '#services' },
+                    { label: 'Secure Storage', href: '#services' },
+                    { label: 'Museum Services', href: '#services' },
+                    { label: 'Custom Crating', href: '#services' }
+                ],
+                Company: [
+                    { label: 'About Us', href: '#about' },
+                    { label: 'Our Commitment', href: '#commitment' },
+                    { label: 'Careers', href: '#' },
+                    { label: 'Contact', href: '#contact' }
+                ],
+                Legal: [
+                    { label: 'Privacy Policy', href: '#' },
+                    { label: 'Terms of Service', href: '#' },
+                    { label: 'Insurance Information', href: '#' },
+                    { label: 'Compliance', href: '#' }
+                ]
+            };
+
+            return (
+                <footer className="bg-slate-900 text-white pt-16 pb-8">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        {/* Main Footer Content */}
+                        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+                            {/* Brand Column */}
+                            <div className="lg:col-span-2">
+                                <div className="flex items-center space-x-3 mb-6">
+                                    <i data-lucide="sparkles" className="w-7 h-7 text-amber-600"></i>
+                                    <div>
+                                        <span className="text-2xl font-light tracking-tight">Aurora</span>
+                                        <p className="text-xs text-slate-400 tracking-wide">FINE ART SERVICES</p>
+                                    </div>
+                                </div>
+                                <p className="text-slate-400 mb-6 leading-relaxed">
+                                    Empowering modern teams to build the future, one workflow at a time.
+                                </p>
+                                <p className="text-sm text-slate-500">
+                                    London's premier fine art logistics partner, trusted by museums, galleries, and private collectors worldwide.
+                                </p>
+                            </div>
+
+                            {/* Links Columns */}
+                            {Object.entries(footerLinks).map(([category, links]) => (
+                                <div key={category}>
+                                    <h4 className="font-medium mb-4 text-white">{category}</h4>
+                                    <ul className="space-y-3">
+                                        {links.map((link) => (
+                                            <li key={link.label}>
+                                                <a
+                                                    href={link.href}
+                                                    className="text-slate-400 hover:text-white transition-colors duration-200 text-sm"
+                                                >
+                                                    {link.label}
+                                                </a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Bottom Footer */}
+                        <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <p className="text-slate-500 text-sm">
+                                © 2025 Aurora Fine Art Services Ltd. All rights reserved.
+                            </p>
+
+                            {/* Trust Badges */}
+                            <div className="flex items-center space-x-6 text-xs text-slate-500">
+                                <div className="flex items-center space-x-2">
+                                    <i data-lucide="shield-check" className="w-4 h-4"></i>
+                                    <span>Fully Insured</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <i data-lucide="award" className="w-4 h-4"></i>
+                                    <span>Accredited</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            );
+        };
+
+        // Main App Component
+        const App = () => {
+            useEffect(() => {
+                // Initialize Lucide icons
+                lucide.createIcons();
+            }, []);
+
+            return (
+                <>
+                    <Navigation />
+                    <main>
+                        <Hero />
+                        <About />
+                        <Services />
+                        <Commitment />
+                        <Contact />
+                    </main>
+                    <Footer />
+                </>
+            );
+        };
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
