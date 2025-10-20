@@ -128,7 +128,7 @@
                                         {link.label}
                                     </a>
                                 ))}
-                                <Button size="sm">Request Consultation</Button>
+                                <Button size="sm" onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}>Request Consultation</Button>
                             </div>
 
                             {/* Mobile Menu Button */}
@@ -156,7 +156,7 @@
                                             {link.label}
                                         </a>
                                     ))}
-                                    <Button className="w-full" size="sm">Request Consultation</Button>
+                                    <Button className="w-full" size="sm" onClick={() => { setIsMenuOpen(false); document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }); }}>Request Consultation</Button>
                                 </div>
                             </div>
                         )}
@@ -196,10 +196,10 @@
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                                <Button size="lg">
+                                <Button size="lg" onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}>
                                     Request a Confidential Consultation
                                 </Button>
-                                <Button variant="secondary" size="lg">
+                                <Button variant="secondary" size="lg" onClick={() => document.getElementById('services').scrollIntoView({ behavior: 'smooth' })}>
                                     Explore Our Services
                                 </Button>
                             </div>
