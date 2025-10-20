@@ -34,7 +34,621 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, createContext, useContext } = React;
+
+        // Translation System
+        const translations = {
+            en: {
+                nav: {
+                    about: 'About',
+                    services: 'Services',
+                    commitment: 'Our Commitment',
+                    contact: 'Contact',
+                    requestConsultation: 'Request Consultation'
+                },
+                hero: {
+                    title: 'Aurora Fine Art Services',
+                    subtitle1: 'Global Precision.',
+                    subtitle2: 'Family Care.',
+                    tagline: 'Now with AI-powered insights',
+                    description1: "Aurora is London's premier fine art logistics partner. We provide comprehensive, museum-quality services for the world's most valuable collections.",
+                    description2: "From secure global transportation and climate-controlled storage to complex museum installations, our service is built on two decades of experience, absolute discretion, and the accountability only a family-owned business can provide.",
+                    ctaPrimary: 'Request a Confidential Consultation',
+                    ctaSecondary: 'Explore Our Services',
+                    teamsCount: '50,000+ teams',
+                    rating: '4.9/5 rating'
+                },
+                about: {
+                    title: 'Our Story: From a Single Van to a Global Standard',
+                    p1: 'Founded in London in the early 2000s, Aurora began as a father-and-son residential moving company with a single van and a commitment to meticulous care. Our reputation for reliability and precision quickly grew, and clients began entrusting us with their most valuable possessions: their art collections.',
+                    p2: 'Recognising the unique demands of the art world, we dedicated ourselves to mastering the complex field of fine art logistics.',
+                    p3: "Today, Aurora is a global leader, trusted by international museums, discerning private collectors, galleries, and artist estates. While our operations now span continents, our core philosophy remains unchanged. We are still a family business, and we treat every piece with the personal accountability and uncompromising standards that defined our very first job.",
+                    missionTitle: 'Our Mission',
+                    missionText: "To be the world's most trusted guardian for fine art and cultural assets, ensuring their preservation and safe passage. We combine the precision of global logistics with the personal integrity of a family legacy."
+                },
+                globalReach: {
+                    title: 'Global Logistics, Personal Touch',
+                    p1: 'Our worldwide network ensures your valuable artworks reach their destination safely, whether across London or across continents.',
+                    p2: 'From air freight coordination to sea cargo management, we handle all aspects of international logistics with the same meticulous attention to detail that has defined Aurora for over two decades.',
+                    countries: 'Countries Served',
+                    support: 'Global Support'
+                },
+                services: {
+                    title: 'Comprehensive Fine Art Solutions',
+                    subtitle: 'Aurora provides a complete, discreet, and secure solution for the entire lifecycle of your collection. Our in-house, highly trained technicians manage every detail.',
+                    transportation: {
+                        title: 'Fine Art Transportation',
+                        intro: 'We manage secure logistics for art, from a single piece to a touring exhibition.',
+                        detail1: 'Specialised Fleet: GPS-tracked, climate-controlled, and high-security vehicles throughout the UK and Europe.',
+                        detail2: 'Global Freight: Seamless, end-to-end air and sea freight forwarding, including customs brokerage.',
+                        detail3: 'Airport Supervision: Tarmac supervision for high-value shipments, ensuring safe handling from aircraft to vehicle.'
+                    },
+                    storage: {
+                        title: 'Secure Art Storage',
+                        intro: 'Our facilities are purpose-built fortresses designed exclusively for fine art.',
+                        detail1: 'London Flagship Facility: Discreet, high-security location with biometric access and 24/7/365 surveillance.',
+                        detail2: 'Climate Control: Multiple independently-managed zones for different material requirements.',
+                        detail3: 'Private Viewing Rooms: Secure, beautifully lit rooms to view, photograph, or show works from your collection.'
+                    },
+                    museum: {
+                        title: 'Museum & Gallery Services',
+                        intro: "We are the trusted partner for London's leading institutions.",
+                        detail1: 'Installation & De-installation: Expert handling of complex, large-scale, and fragile installations.',
+                        detail2: 'Project Management: Complete logistical planning for major exhibitions, including multi-venue tours.'
+                    },
+                    crating: {
+                        title: 'Custom Crating & Packing',
+                        intro: 'Protection is paramount. We build bespoke, museum-grade solutions in-house.',
+                        detail1: 'Master Carpenters: Custom crates tailored to the exact specifications of each piece.',
+                        detail2: 'Archival Materials: Highest-quality, chemically-inert materials for long-term preservation.'
+                    }
+                },
+                commitment: {
+                    title: 'The Aurora Standard',
+                    subtitle: 'We understand that we are not just moving objects; we are protecting cultural and financial legacies. Our commitment is absolute.',
+                    security: {
+                        title: 'Uncompromising Security',
+                        desc: "Discretion is the foundation of our business. All staff are full-time, extensively vetted, and bound by strict confidentiality agreements. Our facilities and vehicles represent the industry's highest security standards."
+                    },
+                    expertise: {
+                        title: 'Technical Expertise',
+                        desc: 'Our team members are not movers; they are art handlers. They receive continuous, rigorous training in conservation-safe techniques for all media, from Old Master paintings to contemporary installations.'
+                    },
+                    trust: {
+                        title: 'A Legacy of Trust',
+                        desc: 'As a family-owned business, our reputation is personal. We provide a level of accountability and direct access that large conglomerates cannot. When you partner with Aurora, you partner with a family dedicated to protecting yours.'
+                    },
+                    service: {
+                        title: 'Global Reach, Personal Service',
+                        desc: 'While our capabilities are global, our service is bespoke. You will have a single, dedicated account manager who understands your collection and requirements, providing clear communication and seamless project management.'
+                    }
+                },
+                contact: {
+                    title: 'Contact Our Team',
+                    subtitle: 'For a confidential discussion about your collection management, transportation, or storage needs, please contact our London headquarters.',
+                    subtitle2: 'Our specialists are available to conduct on-site assessments and provide detailed, bespoke proposals.',
+                    getInTouch: 'Get in Touch',
+                    phone: 'Phone',
+                    email: 'Email',
+                    address: 'London Headquarters',
+                    addressText: 'Confidential Location\nLondon, United Kingdom',
+                    confidential: 'All inquiries are treated with the utmost confidentiality. Our team operates under strict non-disclosure agreements to protect the privacy of our clients and their collections.',
+                    sendMessage: 'Send us a Message',
+                    nameLabel: 'Name *',
+                    emailLabel: 'Email *',
+                    messageLabel: 'Message *',
+                    sendButton: 'Send Message',
+                    nameRequired: 'Name is required',
+                    emailRequired: 'Email is required',
+                    emailInvalid: 'Please enter a valid email address',
+                    messageRequired: 'Message is required',
+                    thankYou: 'Thank you for your inquiry. Our team will contact you shortly.'
+                },
+                footer: {
+                    tagline: "London's premier fine art logistics partner, trusted by museums, galleries, and private collectors worldwide.",
+                    services: 'Services',
+                    company: 'Company',
+                    legal: 'Legal',
+                    copyright: '© 2025 Aurora Fine Art Services Ltd. All rights reserved.',
+                    insured: 'Fully Insured',
+                    accredited: 'Accredited'
+                }
+            },
+            fr: {
+                nav: {
+                    about: 'À propos',
+                    services: 'Services',
+                    commitment: 'Notre Engagement',
+                    contact: 'Contact',
+                    requestConsultation: 'Demander une Consultation'
+                },
+                hero: {
+                    title: 'Aurora Fine Art Services',
+                    subtitle1: 'Précision Mondiale.',
+                    subtitle2: 'Soin Familial.',
+                    tagline: 'Maintenant avec des analyses basées sur l\'IA',
+                    description1: "Aurora est le partenaire logistique d'œuvres d'art de premier plan à Londres. Nous fournissons des services complets de qualité muséale pour les collections les plus précieuses au monde.",
+                    description2: "Du transport mondial sécurisé et du stockage climatisé aux installations muséales complexes, notre service repose sur deux décennies d'expérience, une discrétion absolue et la responsabilité que seule une entreprise familiale peut offrir.",
+                    ctaPrimary: 'Demander une Consultation Confidentielle',
+                    ctaSecondary: 'Découvrir Nos Services',
+                    teamsCount: '50 000+ équipes',
+                    rating: 'Note 4,9/5'
+                },
+                about: {
+                    title: 'Notre Histoire : D\'une Simple Camionnette à une Norme Mondiale',
+                    p1: "Fondée à Londres au début des années 2000, Aurora a commencé comme une entreprise de déménagement père-fils avec une seule camionnette et un engagement envers des soins méticuleux. Notre réputation de fiabilité et de précision s'est rapidement développée, et les clients ont commencé à nous confier leurs biens les plus précieux : leurs collections d'art.",
+                    p2: "Reconnaissant les exigences uniques du monde de l'art, nous nous sommes consacrés à maîtriser le domaine complexe de la logistique des beaux-arts.",
+                    p3: "Aujourd'hui, Aurora est un leader mondial, de confiance pour les musées internationaux, les collectionneurs privés exigeants, les galeries et les successions d'artistes. Bien que nos opérations s'étendent maintenant sur des continents, notre philosophie fondamentale reste inchangée. Nous sommes toujours une entreprise familiale et nous traitons chaque pièce avec la responsabilité personnelle et les normes sans compromis qui ont défini notre tout premier travail.",
+                    missionTitle: 'Notre Mission',
+                    missionText: "Être le gardien le plus fiable au monde pour les œuvres d'art et les biens culturels, assurant leur préservation et leur passage en toute sécurité. Nous combinons la précision de la logistique mondiale avec l'intégrité personnelle d'un héritage familial."
+                },
+                globalReach: {
+                    title: 'Logistique Mondiale, Touche Personnelle',
+                    p1: 'Notre réseau mondial garantit que vos œuvres d\'art précieuses atteignent leur destination en toute sécurité, que ce soit à travers Londres ou à travers les continents.',
+                    p2: 'De la coordination du fret aérien à la gestion du fret maritime, nous gérons tous les aspects de la logistique internationale avec la même attention méticuleuse aux détails qui a défini Aurora pendant plus de deux décennies.',
+                    countries: 'Pays Desservis',
+                    support: 'Support Mondial'
+                },
+                services: {
+                    title: 'Solutions Complètes pour les Beaux-Arts',
+                    subtitle: 'Aurora fournit une solution complète, discrète et sécurisée pour l\'ensemble du cycle de vie de votre collection. Nos techniciens hautement qualifiés en interne gèrent chaque détail.',
+                    transportation: {
+                        title: 'Transport d\'Œuvres d\'Art',
+                        intro: 'Nous gérons la logistique sécurisée pour l\'art, d\'une seule pièce à une exposition itinérante.',
+                        detail1: 'Flotte Spécialisée : Véhicules suivis par GPS, climatisés et hautement sécurisés dans tout le Royaume-Uni et l\'Europe.',
+                        detail2: 'Fret Mondial : Transport aérien et maritime de bout en bout, y compris le courtage en douane.',
+                        detail3: 'Supervision Aéroportuaire : Supervision sur le tarmac pour les envois de grande valeur, assurant une manipulation sûre de l\'avion au véhicule.'
+                    },
+                    storage: {
+                        title: 'Stockage d\'Art Sécurisé',
+                        intro: 'Nos installations sont des forteresses spécialement conçues exclusivement pour les beaux-arts.',
+                        detail1: 'Installation Phare de Londres : Emplacement discret et hautement sécurisé avec accès biométrique et surveillance 24h/24 et 7j/7.',
+                        detail2: 'Contrôle Climatique : Zones multiples gérées indépendamment pour différentes exigences matérielles.',
+                        detail3: 'Salles de Visionnage Privées : Salles sécurisées et magnifiquement éclairées pour voir, photographier ou montrer des œuvres de votre collection.'
+                    },
+                    museum: {
+                        title: 'Services Muséaux et de Galerie',
+                        intro: 'Nous sommes le partenaire de confiance des principales institutions londoniennes.',
+                        detail1: 'Installation et Désinstallation : Manipulation experte d\'installations complexes, à grande échelle et fragiles.',
+                        detail2: 'Gestion de Projet : Planification logistique complète pour les grandes expositions, y compris les tournées multi-sites.'
+                    },
+                    crating: {
+                        title: 'Emballage et Mise en Caisse Sur Mesure',
+                        intro: 'La protection est primordiale. Nous construisons des solutions sur mesure de qualité muséale en interne.',
+                        detail1: 'Maîtres Menuisiers : Caisses personnalisées adaptées aux spécifications exactes de chaque pièce.',
+                        detail2: 'Matériaux d\'Archives : Matériaux de la plus haute qualité, chimiquement inertes pour la préservation à long terme.'
+                    }
+                },
+                commitment: {
+                    title: 'La Norme Aurora',
+                    subtitle: 'Nous comprenons que nous ne déplaçons pas seulement des objets ; nous protégeons des héritages culturels et financiers. Notre engagement est absolu.',
+                    security: {
+                        title: 'Sécurité Sans Compromis',
+                        desc: 'La discrétion est le fondement de notre entreprise. Tout le personnel est à temps plein, rigoureusement vérifié et lié par des accords de confidentialité stricts. Nos installations et véhicules représentent les normes de sécurité les plus élevées de l\'industrie.'
+                    },
+                    expertise: {
+                        title: 'Expertise Technique',
+                        desc: 'Les membres de notre équipe ne sont pas des déménageurs ; ce sont des manipulateurs d\'art. Ils reçoivent une formation continue et rigoureuse en techniques sûres de conservation pour tous les médias, des peintures de maîtres anciens aux installations contemporaines.'
+                    },
+                    trust: {
+                        title: 'Un Héritage de Confiance',
+                        desc: 'En tant qu\'entreprise familiale, notre réputation est personnelle. Nous fournissons un niveau de responsabilité et d\'accès direct que les grands conglomérats ne peuvent pas offrir. Lorsque vous vous associez à Aurora, vous vous associez à une famille dédiée à protéger la vôtre.'
+                    },
+                    service: {
+                        title: 'Portée Mondiale, Service Personnel',
+                        desc: 'Bien que nos capacités soient mondiales, notre service est sur mesure. Vous aurez un seul gestionnaire de compte dédié qui comprend votre collection et vos exigences, fournissant une communication claire et une gestion de projet transparente.'
+                    }
+                },
+                contact: {
+                    title: 'Contactez Notre Équipe',
+                    subtitle: 'Pour une discussion confidentielle sur vos besoins en gestion de collection, transport ou stockage, veuillez contacter notre siège social à Londres.',
+                    subtitle2: 'Nos spécialistes sont disponibles pour effectuer des évaluations sur site et fournir des propositions détaillées et sur mesure.',
+                    getInTouch: 'Contactez-Nous',
+                    phone: 'Téléphone',
+                    email: 'E-mail',
+                    address: 'Siège Social de Londres',
+                    addressText: 'Emplacement Confidentiel\nLondres, Royaume-Uni',
+                    confidential: 'Toutes les demandes sont traitées avec la plus grande confidentialité. Notre équipe opère sous des accords de non-divulgation stricts pour protéger la vie privée de nos clients et de leurs collections.',
+                    sendMessage: 'Envoyez-Nous un Message',
+                    nameLabel: 'Nom *',
+                    emailLabel: 'E-mail *',
+                    messageLabel: 'Message *',
+                    sendButton: 'Envoyer le Message',
+                    nameRequired: 'Le nom est requis',
+                    emailRequired: 'L\'e-mail est requis',
+                    emailInvalid: 'Veuillez entrer une adresse e-mail valide',
+                    messageRequired: 'Le message est requis',
+                    thankYou: 'Merci pour votre demande. Notre équipe vous contactera sous peu.'
+                },
+                footer: {
+                    tagline: 'Partenaire logistique d\'œuvres d\'art de premier plan à Londres, de confiance pour les musées, galeries et collectionneurs privés dans le monde entier.',
+                    services: 'Services',
+                    company: 'Entreprise',
+                    legal: 'Juridique',
+                    copyright: '© 2025 Aurora Fine Art Services Ltd. Tous droits réservés.',
+                    insured: 'Entièrement Assuré',
+                    accredited: 'Accrédité'
+                }
+            },
+            de: {
+                nav: {
+                    about: 'Über Uns',
+                    services: 'Dienstleistungen',
+                    commitment: 'Unser Engagement',
+                    contact: 'Kontakt',
+                    requestConsultation: 'Beratung Anfordern'
+                },
+                hero: {
+                    title: 'Aurora Fine Art Services',
+                    subtitle1: 'Globale Präzision.',
+                    subtitle2: 'Familiäre Fürsorge.',
+                    tagline: 'Jetzt mit KI-gestützten Erkenntnissen',
+                    description1: 'Aurora ist Londons führender Logistikpartner für Kunstwerke. Wir bieten umfassende Dienstleistungen in Museumsqualität für die wertvollsten Sammlungen der Welt.',
+                    description2: 'Vom sicheren globalen Transport und klimatisierten Lagerung bis hin zu komplexen Museumsinstallationen basiert unser Service auf zwei Jahrzehnten Erfahrung, absoluter Diskretion und der Verantwortung, die nur ein Familienunternehmen bieten kann.',
+                    ctaPrimary: 'Vertrauliche Beratung Anfordern',
+                    ctaSecondary: 'Unsere Dienstleistungen Entdecken',
+                    teamsCount: '50.000+ Teams',
+                    rating: '4,9/5 Bewertung'
+                },
+                about: {
+                    title: 'Unsere Geschichte: Von einem einzigen Van zum globalen Standard',
+                    p1: 'Aurora wurde Anfang der 2000er Jahre in London als Vater-Sohn-Umzugsunternehmen mit einem einzigen Van und einem Engagement für sorgfältige Pflege gegründet. Unser Ruf für Zuverlässigkeit und Präzision wuchs schnell, und Kunden begannen, uns ihre wertvollsten Besitztümer anzuvertrauen: ihre Kunstsammlungen.',
+                    p2: 'Als wir die einzigartigen Anforderungen der Kunstwelt erkannten, widmeten wir uns der Beherrschung des komplexen Bereichs der Kunstlogistik.',
+                    p3: 'Heute ist Aurora ein globaler Marktführer, dem internationale Museen, anspruchsvolle Privatsammler, Galerien und Künstlernachlässe vertrauen. Während unsere Aktivitäten sich jetzt über Kontinente erstrecken, bleibt unsere Kernphilosophie unverändert. Wir sind immer noch ein Familienunternehmen und behandeln jedes Stück mit der persönlichen Verantwortung und den kompromisslosen Standards, die unseren allerersten Auftrag definiert haben.',
+                    missionTitle: 'Unsere Mission',
+                    missionText: 'Der vertrauenswürdigste Hüter der Welt für Kunstwerke und kulturelle Vermögenswerte zu sein und deren Erhaltung und sichere Passage zu gewährleisten. Wir kombinieren die Präzision der globalen Logistik mit der persönlichen Integrität eines Familienerbes.'
+                },
+                globalReach: {
+                    title: 'Globale Logistik, Persönliche Note',
+                    p1: 'Unser weltweites Netzwerk stellt sicher, dass Ihre wertvollen Kunstwerke sicher ihr Ziel erreichen, ob in London oder über Kontinente hinweg.',
+                    p2: 'Von der Luftfrachtkoordination bis zur Seefrachtverwaltung kümmern wir uns um alle Aspekte der internationalen Logistik mit derselben akribischen Liebe zum Detail, die Aurora seit über zwei Jahrzehnten auszeichnet.',
+                    countries: 'Bediente Länder',
+                    support: 'Globaler Support'
+                },
+                services: {
+                    title: 'Umfassende Lösungen für Kunstwerke',
+                    subtitle: 'Aurora bietet eine vollständige, diskrete und sichere Lösung für den gesamten Lebenszyklus Ihrer Sammlung. Unsere hauseigenen, hochqualifizierten Techniker verwalten jedes Detail.',
+                    transportation: {
+                        title: 'Kunsttransport',
+                        intro: 'Wir verwalten sichere Logistik für Kunst, von einem einzelnen Stück bis zu einer Wanderausstellung.',
+                        detail1: 'Spezialisierte Flotte: GPS-überwachte, klimatisierte und hochsichere Fahrzeuge in ganz Großbritannien und Europa.',
+                        detail2: 'Weltweiter Fracht: Nahtlose End-to-End-Luft- und Seefracht, einschließlich Zollabfertigung.',
+                        detail3: 'Flughafenüberwachung: Rollfeld-Überwachung für hochwertige Sendungen, die sichere Handhabung vom Flugzeug zum Fahrzeug gewährleistet.'
+                    },
+                    storage: {
+                        title: 'Sichere Kunstlagerung',
+                        intro: 'Unsere Einrichtungen sind speziell gebaute Festungen, die ausschließlich für Kunstwerke konzipiert sind.',
+                        detail1: 'Londoner Flagship-Einrichtung: Diskreter, hochsicherer Standort mit biometrischem Zugang und 24/7/365-Überwachung.',
+                        detail2: 'Klimakontrolle: Mehrere unabhängig verwaltete Zonen für unterschiedliche Materialanforderungen.',
+                        detail3: 'Private Betrachtungsräume: Sichere, schön beleuchtete Räume zum Betrachten, Fotografieren oder Zeigen von Werken aus Ihrer Sammlung.'
+                    },
+                    museum: {
+                        title: 'Museums- und Galeriedienste',
+                        intro: 'Wir sind der vertrauenswürdige Partner für Londons führende Institutionen.',
+                        detail1: 'Installation & Deinstallation: Fachkundige Handhabung komplexer, großformatiger und empfindlicher Installationen.',
+                        detail2: 'Projektmanagement: Vollständige logistische Planung für große Ausstellungen, einschließlich Multi-Venue-Touren.'
+                    },
+                    crating: {
+                        title: 'Maßgeschneiderte Verpackung',
+                        intro: 'Schutz ist von größter Bedeutung. Wir bauen maßgeschneiderte Lösungen in Museumsqualität im eigenen Haus.',
+                        detail1: 'Meistertischler: Maßgefertigte Kisten, die auf die genauen Spezifikationen jedes Stücks zugeschnitten sind.',
+                        detail2: 'Archivmaterialien: Hochwertigste, chemisch inerte Materialien für langfristige Konservierung.'
+                    }
+                },
+                commitment: {
+                    title: 'Der Aurora-Standard',
+                    subtitle: 'Wir verstehen, dass wir nicht nur Objekte bewegen; wir schützen kulturelles und finanzielles Erbe. Unser Engagement ist absolut.',
+                    security: {
+                        title: 'Kompromisslose Sicherheit',
+                        desc: 'Diskretion ist das Fundament unseres Geschäfts. Alle Mitarbeiter sind Vollzeit, umfassend überprüft und an strenge Vertraulichkeitsvereinbarungen gebunden. Unsere Einrichtungen und Fahrzeuge repräsentieren die höchsten Sicherheitsstandards der Branche.'
+                    },
+                    expertise: {
+                        title: 'Technische Expertise',
+                        desc: 'Unsere Teammitglieder sind keine Umzugshelfer; sie sind Kunsthandler. Sie erhalten kontinuierliche, strenge Schulungen in konservierungssicheren Techniken für alle Medien, von Alten Meistern bis zu zeitgenössischen Installationen.'
+                    },
+                    trust: {
+                        title: 'Ein Vermächtnis des Vertrauens',
+                        desc: 'Als Familienunternehmen ist unser Ruf persönlich. Wir bieten ein Maß an Verantwortung und direktem Zugang, das große Konzerne nicht bieten können. Wenn Sie mit Aurora zusammenarbeiten, arbeiten Sie mit einer Familie zusammen, die sich dem Schutz Ihrer Familie verschrieben hat.'
+                    },
+                    service: {
+                        title: 'Globale Reichweite, Persönlicher Service',
+                        desc: 'Während unsere Fähigkeiten global sind, ist unser Service maßgeschneidert. Sie haben einen einzigen, engagierten Account-Manager, der Ihre Sammlung und Anforderungen versteht und klare Kommunikation und nahtloses Projektmanagement bietet.'
+                    }
+                },
+                contact: {
+                    title: 'Kontaktieren Sie Unser Team',
+                    subtitle: 'Für eine vertrauliche Diskussion über Ihre Sammlungsverwaltung, Transport- oder Lageranforderungen wenden Sie sich bitte an unsere Londoner Zentrale.',
+                    subtitle2: 'Unsere Spezialisten stehen für Vor-Ort-Bewertungen und detaillierte, maßgeschneiderte Vorschläge zur Verfügung.',
+                    getInTouch: 'Kontaktieren Sie Uns',
+                    phone: 'Telefon',
+                    email: 'E-Mail',
+                    address: 'Londoner Zentrale',
+                    addressText: 'Vertraulicher Standort\nLondon, Vereinigtes Königreich',
+                    confidential: 'Alle Anfragen werden mit größter Vertraulichkeit behandelt. Unser Team arbeitet unter strengen Vertraulichkeitsvereinbarungen, um die Privatsphäre unserer Kunden und ihrer Sammlungen zu schützen.',
+                    sendMessage: 'Senden Sie Uns eine Nachricht',
+                    nameLabel: 'Name *',
+                    emailLabel: 'E-Mail *',
+                    messageLabel: 'Nachricht *',
+                    sendButton: 'Nachricht Senden',
+                    nameRequired: 'Name ist erforderlich',
+                    emailRequired: 'E-Mail ist erforderlich',
+                    emailInvalid: 'Bitte geben Sie eine gültige E-Mail-Adresse ein',
+                    messageRequired: 'Nachricht ist erforderlich',
+                    thankYou: 'Vielen Dank für Ihre Anfrage. Unser Team wird sich in Kürze mit Ihnen in Verbindung setzen.'
+                },
+                footer: {
+                    tagline: 'Londons führender Logistikpartner für Kunstwerke, dem Museen, Galerien und Privatsammler weltweit vertrauen.',
+                    services: 'Dienstleistungen',
+                    company: 'Unternehmen',
+                    legal: 'Rechtliches',
+                    copyright: '© 2025 Aurora Fine Art Services Ltd. Alle Rechte vorbehalten.',
+                    insured: 'Vollständig Versichert',
+                    accredited: 'Akkreditiert'
+                }
+            },
+            es: {
+                nav: {
+                    about: 'Sobre Nosotros',
+                    services: 'Servicios',
+                    commitment: 'Nuestro Compromiso',
+                    contact: 'Contacto',
+                    requestConsultation: 'Solicitar Consulta'
+                },
+                hero: {
+                    title: 'Aurora Fine Art Services',
+                    subtitle1: 'Precisión Global.',
+                    subtitle2: 'Cuidado Familiar.',
+                    tagline: 'Ahora con análisis impulsados por IA',
+                    description1: 'Aurora es el principal socio logístico de arte fino de Londres. Proporcionamos servicios completos de calidad museística para las colecciones más valiosas del mundo.',
+                    description2: 'Desde transporte global seguro y almacenamiento climatizado hasta instalaciones museísticas complejas, nuestro servicio se basa en dos décadas de experiencia, discreción absoluta y la responsabilidad que solo una empresa familiar puede proporcionar.',
+                    ctaPrimary: 'Solicitar una Consulta Confidencial',
+                    ctaSecondary: 'Explorar Nuestros Servicios',
+                    teamsCount: '50,000+ equipos',
+                    rating: 'Calificación 4.9/5'
+                },
+                about: {
+                    title: 'Nuestra Historia: De una Sola Furgoneta a un Estándar Global',
+                    p1: 'Fundada en Londres a principios de la década de 2000, Aurora comenzó como una empresa de mudanzas residenciales padre-hijo con una sola furgoneta y un compromiso con el cuidado meticuloso. Nuestra reputación de confiabilidad y precisión creció rápidamente, y los clientes comenzaron a confiarnos sus posesiones más valiosas: sus colecciones de arte.',
+                    p2: 'Reconociendo las demandas únicas del mundo del arte, nos dedicamos a dominar el complejo campo de la logística de bellas artes.',
+                    p3: 'Hoy, Aurora es líder global, de confianza para museos internacionales, coleccionistas privados exigentes, galerías y patrimonios de artistas. Aunque nuestras operaciones ahora abarcan continentes, nuestra filosofía central permanece sin cambios. Seguimos siendo una empresa familiar y tratamos cada pieza con la responsabilidad personal y los estándares sin compromisos que definieron nuestro primer trabajo.',
+                    missionTitle: 'Nuestra Misión',
+                    missionText: 'Ser el guardián más confiable del mundo para obras de arte y activos culturales, asegurando su preservación y paso seguro. Combinamos la precisión de la logística global con la integridad personal de un legado familiar.'
+                },
+                globalReach: {
+                    title: 'Logística Global, Toque Personal',
+                    p1: 'Nuestra red mundial garantiza que sus valiosas obras de arte lleguen a su destino de manera segura, ya sea a través de Londres o a través de continentes.',
+                    p2: 'Desde la coordinación de carga aérea hasta la gestión de carga marítima, manejamos todos los aspectos de la logística internacional con la misma atención meticulosa al detalle que ha definido a Aurora durante más de dos décadas.',
+                    countries: 'Países Servidos',
+                    support: 'Soporte Global'
+                },
+                services: {
+                    title: 'Soluciones Completas de Bellas Artes',
+                    subtitle: 'Aurora proporciona una solución completa, discreta y segura para todo el ciclo de vida de su colección. Nuestros técnicos altamente capacitados internos gestionan cada detalle.',
+                    transportation: {
+                        title: 'Transporte de Arte Fino',
+                        intro: 'Gestionamos la logística segura para el arte, desde una sola pieza hasta una exposición itinerante.',
+                        detail1: 'Flota Especializada: Vehículos rastreados por GPS, climatizados y de alta seguridad en todo el Reino Unido y Europa.',
+                        detail2: 'Carga Global: Envío aéreo y marítimo de extremo a extremo, incluido el corretaje aduanero.',
+                        detail3: 'Supervisión Aeroportuaria: Supervisión en pista para envíos de alto valor, asegurando un manejo seguro desde el avión hasta el vehículo.'
+                    },
+                    storage: {
+                        title: 'Almacenamiento de Arte Seguro',
+                        intro: 'Nuestras instalaciones son fortalezas especialmente construidas diseñadas exclusivamente para bellas artes.',
+                        detail1: 'Instalación Insignia de Londres: Ubicación discreta y de alta seguridad con acceso biométrico y vigilancia 24/7/365.',
+                        detail2: 'Control Climático: Múltiples zonas gestionadas independientemente para diferentes requisitos de materiales.',
+                        detail3: 'Salas de Visualización Privadas: Salas seguras y hermosamente iluminadas para ver, fotografiar o mostrar obras de su colección.'
+                    },
+                    museum: {
+                        title: 'Servicios de Museo y Galería',
+                        intro: 'Somos el socio de confianza para las principales instituciones de Londres.',
+                        detail1: 'Instalación y Desinstalación: Manejo experto de instalaciones complejas, a gran escala y frágiles.',
+                        detail2: 'Gestión de Proyectos: Planificación logística completa para exposiciones importantes, incluidas giras de múltiples sedes.'
+                    },
+                    crating: {
+                        title: 'Embalaje y Encajonado Personalizado',
+                        intro: 'La protección es primordial. Construimos soluciones personalizadas de calidad museística internamente.',
+                        detail1: 'Maestros Carpinteros: Cajas personalizadas adaptadas a las especificaciones exactas de cada pieza.',
+                        detail2: 'Materiales de Archivo: Materiales de la más alta calidad, químicamente inertes para la preservación a largo plazo.'
+                    }
+                },
+                commitment: {
+                    title: 'El Estándar Aurora',
+                    subtitle: 'Entendemos que no solo estamos moviendo objetos; estamos protegiendo legados culturales y financieros. Nuestro compromiso es absoluto.',
+                    security: {
+                        title: 'Seguridad Sin Compromisos',
+                        desc: 'La discreción es la base de nuestro negocio. Todo el personal es de tiempo completo, exhaustivamente verificado y vinculado por acuerdos de confidencialidad estrictos. Nuestras instalaciones y vehículos representan los estándares de seguridad más altos de la industria.'
+                    },
+                    expertise: {
+                        title: 'Experiencia Técnica',
+                        desc: 'Los miembros de nuestro equipo no son transportistas; son manipuladores de arte. Reciben capacitación continua y rigurosa en técnicas seguras de conservación para todos los medios, desde pinturas de Maestros Antiguos hasta instalaciones contemporáneas.'
+                    },
+                    trust: {
+                        title: 'Un Legado de Confianza',
+                        desc: 'Como empresa familiar, nuestra reputación es personal. Proporcionamos un nivel de responsabilidad y acceso directo que los grandes conglomerados no pueden ofrecer. Cuando se asocia con Aurora, se asocia con una familia dedicada a proteger la suya.'
+                    },
+                    service: {
+                        title: 'Alcance Global, Servicio Personal',
+                        desc: 'Si bien nuestras capacidades son globales, nuestro servicio es a medida. Tendrá un único gerente de cuenta dedicado que comprende su colección y requisitos, brindando comunicación clara y gestión de proyectos sin problemas.'
+                    }
+                },
+                contact: {
+                    title: 'Contacte a Nuestro Equipo',
+                    subtitle: 'Para una discusión confidencial sobre sus necesidades de gestión de colecciones, transporte o almacenamiento, comuníquese con nuestra sede central en Londres.',
+                    subtitle2: 'Nuestros especialistas están disponibles para realizar evaluaciones en el sitio y proporcionar propuestas detalladas y a medida.',
+                    getInTouch: 'Póngase en Contacto',
+                    phone: 'Teléfono',
+                    email: 'Correo Electrónico',
+                    address: 'Sede Central de Londres',
+                    addressText: 'Ubicación Confidencial\nLondres, Reino Unido',
+                    confidential: 'Todas las consultas se tratan con la máxima confidencialidad. Nuestro equipo opera bajo estrictos acuerdos de no divulgación para proteger la privacidad de nuestros clientes y sus colecciones.',
+                    sendMessage: 'Envíenos un Mensaje',
+                    nameLabel: 'Nombre *',
+                    emailLabel: 'Correo Electrónico *',
+                    messageLabel: 'Mensaje *',
+                    sendButton: 'Enviar Mensaje',
+                    nameRequired: 'El nombre es obligatorio',
+                    emailRequired: 'El correo electrónico es obligatorio',
+                    emailInvalid: 'Por favor ingrese una dirección de correo electrónico válida',
+                    messageRequired: 'El mensaje es obligatorio',
+                    thankYou: 'Gracias por su consulta. Nuestro equipo se pondrá en contacto con usted en breve.'
+                },
+                footer: {
+                    tagline: 'Principal socio logístico de arte fino de Londres, de confianza para museos, galerías y coleccionistas privados en todo el mundo.',
+                    services: 'Servicios',
+                    company: 'Empresa',
+                    legal: 'Legal',
+                    copyright: '© 2025 Aurora Fine Art Services Ltd. Todos los derechos reservados.',
+                    insured: 'Totalmente Asegurado',
+                    accredited: 'Acreditado'
+                }
+            },
+            zh: {
+                nav: {
+                    about: '关于我们',
+                    services: '服务',
+                    commitment: '我们的承诺',
+                    contact: '联系',
+                    requestConsultation: '申请咨询'
+                },
+                hero: {
+                    title: 'Aurora Fine Art Services',
+                    subtitle1: '全球精准。',
+                    subtitle2: '家庭关怀。',
+                    tagline: '现已推出AI驱动的洞察',
+                    description1: 'Aurora 是伦敦首屈一指的艺术品物流合作伙伴。我们为世界上最有价值的收藏品提供全面的博物馆级服务。',
+                    description2: '从安全的全球运输和气候控制存储到复杂的博物馆装置，我们的服务建立在二十年的经验、绝对的谨慎以及只有家族企业才能提供的责任之上。',
+                    ctaPrimary: '申请保密咨询',
+                    ctaSecondary: '探索我们的服务',
+                    teamsCount: '50,000+ 团队',
+                    rating: '4.9/5 评分'
+                },
+                about: {
+                    title: '我们的故事：从单一货车到全球标准',
+                    p1: 'Aurora 成立于 2000 年代初的伦敦，最初是一家父子住宅搬家公司，只有一辆货车和对细致关怀的承诺。我们在可靠性和精确性方面的声誉迅速增长，客户开始将他们最有价值的财产——艺术收藏品——托付给我们。',
+                    p2: '认识到艺术世界的独特需求，我们致力于掌握艺术品物流这一复杂领域。',
+                    p3: '如今，Aurora 已成为全球领导者，受到国际博物馆、挑剔的私人收藏家、画廊和艺术家遗产的信任。虽然我们的业务现在跨越大陆，但我们的核心理念保持不变。我们仍然是一家家族企业，我们以个人责任和不妥协的标准对待每一件作品，这些标准定义了我们的第一份工作。',
+                    missionTitle: '我们的使命',
+                    missionText: '成为世界上最值得信赖的艺术品和文化资产守护者，确保它们的保存和安全通行。我们将全球物流的精确性与家族传承的个人诚信相结合。'
+                },
+                globalReach: {
+                    title: '全球物流，个人化服务',
+                    p1: '我们的全球网络确保您珍贵的艺术品安全到达目的地，无论是跨越伦敦还是跨越大陆。',
+                    p2: '从航空货运协调到海运货物管理，我们以同样细致入微的态度处理国际物流的所有方面，这种态度定义了 Aurora 二十多年来的发展。',
+                    countries: '服务国家',
+                    support: '全球支持'
+                },
+                services: {
+                    title: '全面的艺术品解决方案',
+                    subtitle: 'Aurora 为您的收藏品的整个生命周期提供完整、谨慎和安全的解决方案。我们内部训练有素的技术人员管理每一个细节。',
+                    transportation: {
+                        title: '艺术品运输',
+                        intro: '我们管理艺术品的安全物流，从单件作品到巡回展览。',
+                        detail1: '专业车队：GPS 跟踪、气候控制和高安全性车辆遍布英国和欧洲。',
+                        detail2: '全球货运：无缝的端到端空运和海运，包括海关报关。',
+                        detail3: '机场监督：对高价值货物进行停机坪监督，确保从飞机到车辆的安全处理。'
+                    },
+                    storage: {
+                        title: '安全艺术品存储',
+                        intro: '我们的设施是专门为艺术品设计的专用堡垒。',
+                        detail1: '伦敦旗舰设施：谨慎的高安全性位置，配备生物识别访问和 24/7/365 监控。',
+                        detail2: '气候控制：多个独立管理的区域，满足不同材料要求。',
+                        detail3: '私人观看室：安全、照明精美的房间，用于查看、拍照或展示您收藏的作品。'
+                    },
+                    museum: {
+                        title: '博物馆和画廊服务',
+                        intro: '我们是伦敦领先机构的值得信赖的合作伙伴。',
+                        detail1: '安装和拆卸：专业处理复杂、大型和易碎的装置。',
+                        detail2: '项目管理：大型展览的完整物流规划，包括多场地巡回。'
+                    },
+                    crating: {
+                        title: '定制包装',
+                        intro: '保护至关重要。我们内部构建定制的博物馆级解决方案。',
+                        detail1: '工匠木工：根据每件作品的确切规格定制的箱子。',
+                        detail2: '档案材料：最高质量、化学惰性材料，用于长期保存。'
+                    }
+                },
+                commitment: {
+                    title: 'Aurora 标准',
+                    subtitle: '我们明白，我们不仅仅是在移动物品；我们在保护文化和财务遗产。我们的承诺是绝对的。',
+                    security: {
+                        title: '毫不妥协的安全性',
+                        desc: '谨慎是我们业务的基础。所有员工都是全职的，经过广泛审查，并受到严格保密协议的约束。我们的设施和车辆代表了业界最高的安全标准。'
+                    },
+                    expertise: {
+                        title: '技术专长',
+                        desc: '我们的团队成员不是搬运工；他们是艺术品处理员。他们接受持续、严格的培训，掌握所有媒介的保护安全技术，从古典大师绘画到当代装置。'
+                    },
+                    trust: {
+                        title: '信任的传承',
+                        desc: '作为一家家族企业，我们的声誉是个人的。我们提供大型企业集团无法提供的责任水平和直接访问权限。当您与 Aurora 合作时，您就与一个致力于保护您的家族合作。'
+                    },
+                    service: {
+                        title: '全球覆盖，个性化服务',
+                        desc: '虽然我们的能力是全球性的，但我们的服务是定制的。您将拥有一位专门的客户经理，他了解您的收藏和要求，提供清晰的沟通和无缝的项目管理。'
+                    }
+                },
+                contact: {
+                    title: '联系我们的团队',
+                    subtitle: '如需就您的收藏品管理、运输或存储需求进行保密讨论，请联系我们的伦敦总部。',
+                    subtitle2: '我们的专家可以进行现场评估并提供详细的定制方案。',
+                    getInTouch: '联系我们',
+                    phone: '电话',
+                    email: '电子邮件',
+                    address: '伦敦总部',
+                    addressText: '保密地点\n伦敦，英国',
+                    confidential: '所有询问都以最高的保密性对待。我们的团队在严格的保密协议下运作，以保护我们的客户及其收藏的隐私。',
+                    sendMessage: '给我们留言',
+                    nameLabel: '姓名 *',
+                    emailLabel: '电子邮件 *',
+                    messageLabel: '留言 *',
+                    sendButton: '发送消息',
+                    nameRequired: '姓名为必填项',
+                    emailRequired: '电子邮件为必填项',
+                    emailInvalid: '请输入有效的电子邮件地址',
+                    messageRequired: '留言为必填项',
+                    thankYou: '感谢您的询问。我们的团队将很快与您联系。'
+                },
+                footer: {
+                    tagline: '伦敦首屈一指的艺术品物流合作伙伴，受到全球博物馆、画廊和私人收藏家的信赖。',
+                    services: '服务',
+                    company: '公司',
+                    legal: '法律',
+                    copyright: '© 2025 Aurora Fine Art Services Ltd. 保留所有权利。',
+                    insured: '全额保险',
+                    accredited: '经认可'
+                }
+            }
+        };
+
+        // Language Context
+        const LanguageContext = createContext();
+
+        const LanguageProvider = ({ children }) => {
+            const [language, setLanguage] = useState(() => {
+                return localStorage.getItem('auroraLanguage') || 'en';
+            });
+
+            const changeLanguage = (lang) => {
+                setLanguage(lang);
+                localStorage.setItem('auroraLanguage', lang);
+            };
+
+            const t = translations[language];
+
+            return (
+                <LanguageContext.Provider value={{ language, changeLanguage, t }}>
+                    {children}
+                </LanguageContext.Provider>
+            );
+        };
+
+        const useTranslation = () => {
+            const context = useContext(LanguageContext);
+            if (!context) {
+                throw new Error('useTranslation must be used within a LanguageProvider');
+            }
+            return context;
+        };
 
         // Reusable Button Component - Elegant design for luxury brand
         const Button = ({ children, variant = 'primary', size = 'md', className = '', ...props }) => {
@@ -80,8 +694,60 @@
             );
         };
 
+        // Language Selector Component
+        const LanguageSelector = () => {
+            const { language, changeLanguage } = useTranslation();
+            const [isOpen, setIsOpen] = useState(false);
+
+            const languages = [
+                { code: 'en', name: 'English', flag: '🇬🇧' },
+                { code: 'fr', name: 'Français', flag: '🇫🇷' },
+                { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+                { code: 'es', name: 'Español', flag: '🇪🇸' },
+                { code: 'zh', name: '中文', flag: '🇨🇳' }
+            ];
+
+            const currentLang = languages.find(l => l.code === language);
+
+            return (
+                <div className="relative">
+                    <button
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors"
+                        aria-label="Select language"
+                    >
+                        <span className="text-lg">{currentLang.flag}</span>
+                        <span className="hidden sm:inline text-sm font-medium text-slate-700">{currentLang.name}</span>
+                        <i data-lucide="chevron-down" className="w-4 h-4 text-slate-500"></i>
+                    </button>
+
+                    {isOpen && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-slate-200 py-2 animate-fade-in-up">
+                            {languages.map((lang) => (
+                                <button
+                                    key={lang.code}
+                                    onClick={() => {
+                                        changeLanguage(lang.code);
+                                        setIsOpen(false);
+                                    }}
+                                    className={`w-full flex items-center space-x-3 px-4 py-2 hover:bg-slate-50 transition-colors ${language === lang.code ? 'bg-slate-100' : ''}`}
+                                >
+                                    <span className="text-lg">{lang.flag}</span>
+                                    <span className="text-sm font-medium text-slate-700">{lang.name}</span>
+                                    {language === lang.code && (
+                                        <i data-lucide="check" className="w-4 h-4 text-amber-600 ml-auto"></i>
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
         // Navigation Component
         const Navigation = () => {
+            const { t } = useTranslation();
             const [isMenuOpen, setIsMenuOpen] = useState(false);
             const [isScrolled, setIsScrolled] = useState(false);
 
@@ -94,10 +760,10 @@
             }, []);
 
             const navLinks = [
-                { href: '#about', label: 'About' },
-                { href: '#services', label: 'Services' },
-                { href: '#commitment', label: 'Our Commitment' },
-                { href: '#contact', label: 'Contact' }
+                { href: '#about', label: t.nav.about },
+                { href: '#services', label: t.nav.services },
+                { href: '#commitment', label: t.nav.commitment },
+                { href: '#contact', label: t.nav.contact }
             ];
 
             return (
@@ -118,7 +784,7 @@
                             </div>
 
                             {/* Desktop Navigation */}
-                            <div className="hidden md:flex items-center space-x-10">
+                            <div className="hidden md:flex items-center space-x-6">
                                 {navLinks.map((link) => (
                                     <a
                                         key={link.href}
@@ -128,7 +794,8 @@
                                         {link.label}
                                     </a>
                                 ))}
-                                <Button size="sm" onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}>Request Consultation</Button>
+                                <LanguageSelector />
+                                <Button size="sm" onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}>{t.nav.requestConsultation}</Button>
                             </div>
 
                             {/* Mobile Menu Button */}
@@ -156,7 +823,10 @@
                                             {link.label}
                                         </a>
                                     ))}
-                                    <Button className="w-full" size="sm" onClick={() => { setIsMenuOpen(false); document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }); }}>Request Consultation</Button>
+                                    <div className="pt-2 border-t border-slate-100">
+                                        <LanguageSelector />
+                                    </div>
+                                    <Button className="w-full" size="sm" onClick={() => { setIsMenuOpen(false); document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }); }}>{t.nav.requestConsultation}</Button>
                                 </div>
                             </div>
                         )}
@@ -167,40 +837,40 @@
 
         // Hero Section
         const Hero = () => {
+            const { t } = useTranslation();
+
             return (
                 <Section className="pt-32 pb-24 bg-slate-50">
                     <div className="grid lg:grid-cols-2 gap-16 items-center">
                         <div className="space-y-8 animate-fade-in-up">
                             <div>
                                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light leading-tight text-slate-900 mb-6">
-                                    Aurora Fine Art Services
+                                    {t.hero.title}
                                 </h1>
                                 <p className="text-2xl sm:text-3xl font-light text-slate-600 mb-2">
-                                    Global Precision.
+                                    {t.hero.subtitle1}
                                 </p>
                                 <p className="text-2xl sm:text-3xl font-light text-slate-600">
-                                    Family Care.
+                                    {t.hero.subtitle2}
                                 </p>
                             </div>
 
                             <div className="w-16 h-0.5 bg-amber-600"></div>
 
                             <p className="text-lg text-slate-600 leading-relaxed">
-                                Aurora is London's premier fine art logistics partner. We provide comprehensive, museum-quality services
-                                for the world's most valuable collections.
+                                {t.hero.description1}
                             </p>
 
                             <p className="text-lg text-slate-600 leading-relaxed">
-                                From secure global transportation and climate-controlled storage to complex museum installations, our service
-                                is built on two decades of experience, absolute discretion, and the accountability only a family-owned business can provide.
+                                {t.hero.description2}
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-4 pt-4">
                                 <Button size="lg" onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}>
-                                    Request a Confidential Consultation
+                                    {t.hero.ctaPrimary}
                                 </Button>
                                 <Button variant="secondary" size="lg" onClick={() => document.getElementById('services').scrollIntoView({ behavior: 'smooth' })}>
-                                    Explore Our Services
+                                    {t.hero.ctaSecondary}
                                 </Button>
                             </div>
                         </div>
@@ -742,7 +1412,11 @@
 
         // Render the app
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        root.render(
+            <LanguageProvider>
+                <App />
+            </LanguageProvider>
+        );
     </script>
 </body>
 </html>
