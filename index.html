@@ -156,7 +156,7 @@
                 nav: {
                     about: 'About',
                     services: 'Services',
-                    commitment: 'Our Commitment',
+                    commitment: 'Commitment',
                     contact: 'Contact',
                     requestConsultation: 'Request Consultation'
                 },
@@ -769,9 +769,9 @@
             const baseStyles = 'inline-flex items-center justify-center font-medium tracking-wide transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 btn-press hover:shadow-lg';
 
             const variants = {
-                primary: 'bg-slate-900 text-white hover:bg-slate-800 focus:ring-slate-500 border border-slate-900 hover:scale-105',
-                secondary: 'bg-white text-slate-900 border-2 border-slate-200 hover:border-slate-900 hover:bg-slate-50 focus:ring-slate-300 hover:scale-105',
-                outline: 'border-2 border-white text-white hover:bg-white hover:text-slate-900 focus:ring-white hover:scale-105'
+                primary: 'bg-[#CC5F30] text-white hover:bg-[#B35429] focus:ring-[#CC5F30] border border-[#CC5F30] hover:scale-105',
+                secondary: 'bg-white text-[#192030] border-2 border-[#CC5F30] hover:border-[#B35429] hover:bg-[#CC5F30]/10 focus:ring-[#CC5F30] hover:scale-105',
+                outline: 'border-2 border-white text-white hover:bg-white hover:text-[#192030] focus:ring-white hover:scale-105'
             };
 
             const sizes = {
@@ -809,7 +809,7 @@
         };
 
         // Language Selector Component
-        const LanguageSelector = () => {
+        const LanguageSelector = ({ isScrolled }) => {
             const { language, changeLanguage } = useTranslation();
             const [isOpen, setIsOpen] = useState(false);
 
@@ -827,12 +827,11 @@
                 <div className="relative">
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors"
+                        className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors duration-500 ${isScrolled ? 'hover:bg-[#CC5F30]/10' : 'hover:bg-white/10'}`}
                         aria-label="Select language"
                     >
                         <span className="text-lg">{currentLang.flag}</span>
-                        <span className="hidden sm:inline text-sm font-medium text-slate-700">{currentLang.name}</span>
-                        <i data-lucide="chevron-down" className="w-4 h-4 text-slate-500"></i>
+                        <i data-lucide="chevron-down" className={`w-4 h-4 transition-colors duration-500 ${isScrolled ? 'text-slate-500' : 'text-slate-200'}`}></i>
                     </button>
 
                     {isOpen && (
@@ -844,12 +843,12 @@
                                         changeLanguage(lang.code);
                                         setIsOpen(false);
                                     }}
-                                    className={`w-full flex items-center space-x-3 px-4 py-2 hover:bg-slate-50 transition-colors ${language === lang.code ? 'bg-slate-100' : ''}`}
+                                    className={`w-full flex items-center space-x-3 px-4 py-2 hover:bg-[#CC5F30]/10 transition-colors ${language === lang.code ? 'bg-[#CC5F30]/20' : ''}`}
                                 >
                                     <span className="text-lg">{lang.flag}</span>
                                     <span className="text-sm font-medium text-slate-700">{lang.name}</span>
                                     {language === lang.code && (
-                                        <i data-lucide="check" className="w-4 h-4 text-amber-600 ml-auto"></i>
+                                        <i data-lucide="check" className="w-4 h-4 text-[#CC5F30] ml-auto"></i>
                                     )}
                                 </button>
                             ))}
@@ -867,7 +866,7 @@
 
             useEffect(() => {
                 const handleScroll = () => {
-                    setIsScrolled(window.scrollY > 20);
+                    setIsScrolled(window.scrollY > 50);
                 };
                 window.addEventListener('scroll', handleScroll);
                 return () => window.removeEventListener('scroll', handleScroll);
@@ -881,19 +880,13 @@
             ];
 
             return (
-                <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-sm' : 'bg-white'} border-b border-slate-100`}>
+                <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-sm border-b border-slate-100' : 'bg-transparent border-b border-transparent'}`}>
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex justify-between items-center h-20">
                             {/* Logo */}
                             <div className="flex items-center space-x-3">
                                 <div className="flex items-center justify-center">
-                                    <i data-lucide="sparkles" className="w-7 h-7 text-amber-600"></i>
-                                </div>
-                                <div>
-                                    <span className="text-2xl font-light tracking-tight text-slate-900">
-                                        Aurora
-                                    </span>
-                                    <p className="text-xs text-slate-500 tracking-wide">FINE ART SERVICES</p>
+                                    <i data-lucide="sparkles" className={`w-7 h-7 transition-colors duration-500 ${isScrolled ? 'text-[#CC5F30]' : 'text-[#CC5F30]'}`}></i>
                                 </div>
                             </div>
 
@@ -903,23 +896,23 @@
                                     <a
                                         key={link.href}
                                         href={link.href}
-                                        className="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors duration-200"
+                                        className={`text-sm font-medium transition-colors duration-500 ${isScrolled ? 'text-slate-600 hover:text-[#CC5F30]' : 'text-white hover:text-[#E1E101]'}`}
                                     >
                                         {link.label}
                                     </a>
                                 ))}
-                                <LanguageSelector />
-                                <Button size="sm" onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}>{t.nav.requestConsultation}</Button>
+                                <LanguageSelector isScrolled={isScrolled} />
+                                <Button variant={isScrolled ? 'secondary' : 'outline'} size="sm" onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}>{t.nav.requestConsultation}</Button>
                             </div>
 
                             {/* Mobile Menu Button */}
                             <button
-                                className="md:hidden p-2 hover:bg-slate-50 transition-colors"
+                                className={`md:hidden p-2 transition-colors duration-500 ${isScrolled ? 'hover:bg-[#CC5F30]/10' : 'hover:bg-white/10'}`}
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                                 aria-label="Toggle menu"
                                 aria-expanded={isMenuOpen}
                             >
-                                <i data-lucide={isMenuOpen ? 'x' : 'menu'} className="w-6 h-6 text-slate-700"></i>
+                                <i data-lucide={isMenuOpen ? 'x' : 'menu'} className={`w-6 h-6 transition-colors duration-500 ${isScrolled ? 'text-slate-700' : 'text-white'}`}></i>
                             </button>
                         </div>
 
@@ -931,7 +924,7 @@
                                         <a
                                             key={link.href}
                                             href={link.href}
-                                            className="text-slate-600 hover:text-slate-900 font-medium transition-colors duration-200 py-2"
+                                            className="text-slate-600 hover:text-[#CC5F30] font-medium transition-colors duration-200 py-2"
                                             onClick={() => setIsMenuOpen(false)}
                                         >
                                             {link.label}
@@ -954,50 +947,50 @@
             const { t } = useTranslation();
 
             return (
-                <Section className="pt-32 pb-24 bg-slate-50">
-                    <div className="grid lg:grid-cols-2 gap-16 items-center">
-                        <div className="space-y-8 animate-fade-in-up">
+                <Section className="pt-20 pb-24 relative min-h-screen flex items-center">
+                    {/* Full-scale Background Image */}
+                    <div className="absolute inset-0 z-0">
+                        <img
+                            src="Content/pexels-elevate-1267325.jpg"
+                            alt="Professional art transportation vehicles at Aurora facility"
+                            className="w-full h-full object-cover"
+                        />
+                        {/* Semi-transparent overlay for text readability */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/85 via-slate-900/70 to-slate-900/50"></div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                        <div className="max-w-3xl space-y-8 animate-fade-in-up">
                             <div>
-                                <h1 className="hero-title text-5xl sm:text-6xl lg:text-7xl font-semibold leading-tight text-slate-900 mb-6">
+                                <h1 className="hero-title text-5xl sm:text-6xl lg:text-7xl font-semibold leading-tight text-white mb-6">
                                     {t.hero.title}
                                 </h1>
-                                <p className="text-2xl sm:text-3xl font-light text-slate-600 mb-2">
+                                <p className="text-2xl sm:text-3xl font-light text-[#CC5F30] mb-2">
                                     {t.hero.subtitle1}
                                 </p>
-                                <p className="text-2xl sm:text-3xl font-light text-slate-600">
+                                <p className="text-2xl sm:text-3xl font-light text-[#CC5F30]">
                                     {t.hero.subtitle2}
                                 </p>
                             </div>
 
-                            <div className="w-16 h-0.5 bg-amber-600"></div>
+                            <div className="w-16 h-0.5 bg-[#CC5F30]"></div>
 
-                            <p className="text-lg text-slate-600 leading-relaxed">
+                            <p className="text-lg text-slate-100 leading-relaxed">
                                 {t.hero.description1}
                             </p>
 
-                            <p className="text-lg text-slate-600 leading-relaxed">
+                            <p className="text-lg text-slate-100 leading-relaxed">
                                 {t.hero.description2}
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                                <Button size="lg" onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}>
+                                <Button variant="outline" size="lg" onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}>
                                     {t.hero.ctaPrimary}
                                 </Button>
-                                <Button variant="secondary" size="lg" onClick={() => document.getElementById('services').scrollIntoView({ behavior: 'smooth' })}>
+                                <Button variant="outline" size="lg" onClick={() => document.getElementById('services').scrollIntoView({ behavior: 'smooth' })}>
                                     {t.hero.ctaSecondary}
                                 </Button>
-                            </div>
-                        </div>
-
-                        {/* Hero Image */}
-                        <div className="relative animate-fade-in-up" style={{animationDelay: '0.2s'}}>
-                            <div className="relative aspect-[4/5] overflow-hidden border border-slate-200 shadow-xl image-hover-zoom">
-                                <img
-                                    src="Content/pexels-elevate-1267325.jpg"
-                                    alt="Professional art transportation vehicles at Aurora facility"
-                                    className="w-full h-full object-cover"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent pointer-events-none"></div>
                             </div>
                         </div>
                     </div>
@@ -1011,10 +1004,10 @@
                 <Section id="about" className="bg-white">
                     <div className="max-w-4xl mx-auto">
                         <div className="text-center mb-12">
-                            <h2 className="text-4xl sm:text-5xl font-light text-slate-900 mb-4">
+                            <h2 className="hero-title text-4xl sm:text-5xl font-light text-slate-900 mb-4">
                                 Our Story: From a Single Van to a Global Standard
                             </h2>
-                            <div className="w-16 h-0.5 bg-amber-600 mx-auto mt-6"></div>
+                            <div className="w-16 h-0.5 bg-[#CC5F30] mx-auto mt-6"></div>
                         </div>
 
                         <div className="space-y-6 text-lg text-slate-600 leading-relaxed">
@@ -1050,9 +1043,9 @@
         // Global Reach Section
         const GlobalReach = () => {
             return (
-                <Section className="bg-slate-50">
+                <Section className="bg-[#192030]">
                     <div className="grid lg:grid-cols-2 gap-16 items-center">
-                        <div className="order-2 lg:order-1 image-hover-zoom overflow-hidden border border-slate-200 shadow-xl">
+                        <div className="order-2 lg:order-1 image-hover-zoom overflow-hidden border border-slate-700 shadow-xl">
                             <img
                                 src="Content/pexels-hormel-media-1095814.jpg"
                                 alt="Global shipping and freight services"
@@ -1060,24 +1053,24 @@
                             />
                         </div>
                         <div className="order-1 lg:order-2 space-y-6">
-                            <h2 className="text-4xl sm:text-5xl font-light text-slate-900">
+                            <h2 className="hero-title text-4xl sm:text-5xl font-light text-white">
                                 Global Logistics, Personal Touch
                             </h2>
-                            <div className="w-16 h-0.5 bg-amber-600"></div>
-                            <p className="text-lg text-slate-600 leading-relaxed">
+                            <div className="w-16 h-0.5 bg-[#E1E101]"></div>
+                            <p className="text-lg text-slate-200 leading-relaxed">
                                 Our worldwide network ensures your valuable artworks reach their destination safely, whether across London or across continents.
                             </p>
-                            <p className="text-lg text-slate-600 leading-relaxed">
+                            <p className="text-lg text-slate-200 leading-relaxed">
                                 From air freight coordination to sea cargo management, we handle all aspects of international logistics with the same meticulous attention to detail that has defined Aurora for over two decades.
                             </p>
                             <div className="grid grid-cols-2 gap-6 pt-4">
                                 <div>
-                                    <p className="text-3xl font-light text-slate-900 mb-2">50+</p>
-                                    <p className="text-sm text-slate-600">Countries Served</p>
+                                    <p className="text-3xl font-light text-white mb-2">50+</p>
+                                    <p className="text-sm text-slate-300">Countries Served</p>
                                 </div>
                                 <div>
-                                    <p className="text-3xl font-light text-slate-900 mb-2">24/7</p>
-                                    <p className="text-sm text-slate-600">Global Support</p>
+                                    <p className="text-3xl font-light text-white mb-2">24/7</p>
+                                    <p className="text-sm text-slate-300">Global Support</p>
                                 </div>
                             </div>
                         </div>
@@ -1134,12 +1127,12 @@
             ];
 
             return (
-                <Section id="services" className="bg-slate-50">
+                <Section id="services" className="bg-white">
                     <div className="text-center mb-16">
-                        <h2 className="text-4xl sm:text-5xl font-light text-slate-900 mb-4">
+                        <h2 className="hero-title text-4xl sm:text-5xl font-light text-slate-900 mb-4">
                             Comprehensive Fine Art Solutions
                         </h2>
-                        <div className="w-16 h-0.5 bg-amber-600 mx-auto mt-6 mb-6"></div>
+                        <div className="w-16 h-0.5 bg-[#CC5F30] mx-auto mt-6 mb-6"></div>
                         <p className="text-lg text-slate-600 max-w-3xl mx-auto">
                             Aurora provides a complete, discreet, and secure solution for the entire lifecycle of your collection.
                             Our in-house, highly trained technicians manage every detail.
@@ -1148,7 +1141,7 @@
 
                     <div className="grid md:grid-cols-2 gap-8">
                         {services.map((service, index) => (
-                            <Card key={index} className="hover:border-amber-600 overflow-hidden p-0 fade-in-section stagger-${index + 1}">
+                            <Card key={index} className="hover:border-[#CC5F30] overflow-hidden p-0 fade-in-section stagger-${index + 1}">
                                 {/* Service Image */}
                                 <div className="h-48 overflow-hidden image-hover-zoom">
                                     <img
@@ -1161,7 +1154,7 @@
                                 {/* Service Content */}
                                 <div className="p-8">
                                     <div className="flex items-start space-x-4 mb-6">
-                                        <div className="w-12 h-12 bg-amber-600 flex items-center justify-center flex-shrink-0">
+                                        <div className="w-12 h-12 bg-[#CC5F30] flex items-center justify-center flex-shrink-0">
                                             <i data-lucide={service.icon} className="w-6 h-6 text-white"></i>
                                         </div>
                                         <div>
@@ -1210,13 +1203,13 @@
             ];
 
             return (
-                <Section id="commitment" className="bg-white">
+                <Section id="commitment" className="bg-[#192030]">
                     <div className="text-center mb-16">
-                        <h2 className="text-4xl sm:text-5xl font-light text-slate-900 mb-4">
+                        <h2 className="hero-title text-4xl sm:text-5xl font-light text-white mb-4">
                             The Aurora Standard
                         </h2>
-                        <div className="w-16 h-0.5 bg-amber-600 mx-auto mt-6 mb-6"></div>
-                        <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+                        <div className="w-16 h-0.5 bg-[#E1E101] mx-auto mt-6 mb-6"></div>
+                        <p className="text-lg text-slate-200 max-w-3xl mx-auto">
                             We understand that we are not just moving objects; we are protecting cultural and financial legacies.
                             Our commitment is absolute.
                         </p>
@@ -1226,13 +1219,13 @@
                         {commitments.map((commitment, index) => (
                             <div key={index} className="flex space-x-6">
                                 <div className="flex-shrink-0">
-                                    <div className="w-14 h-14 border-2 border-amber-600 flex items-center justify-center">
-                                        <i data-lucide={commitment.icon} className="w-7 h-7 text-amber-600"></i>
+                                    <div className="w-14 h-14 border-2 border-[#E1E101] flex items-center justify-center">
+                                        <i data-lucide={commitment.icon} className="w-7 h-7 text-[#E1E101]"></i>
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-medium text-slate-900 mb-3">{commitment.title}</h3>
-                                    <p className="text-slate-600 leading-relaxed">{commitment.description}</p>
+                                    <h3 className="text-xl font-medium text-white mb-3">{commitment.title}</h3>
+                                    <p className="text-slate-200 leading-relaxed">{commitment.description}</p>
                                 </div>
                             </div>
                         ))}
@@ -1290,13 +1283,13 @@
             };
 
             return (
-                <Section id="contact" className="bg-slate-50">
+                <Section id="contact" className="bg-white">
                     <div className="max-w-5xl mx-auto">
                         <div className="text-center mb-12">
-                            <h2 className="text-4xl sm:text-5xl font-light text-slate-900 mb-4">
+                            <h2 className="hero-title text-4xl sm:text-5xl font-light text-slate-900 mb-4">
                                 Contact Our Team
                             </h2>
-                            <div className="w-16 h-0.5 bg-amber-600 mx-auto mt-6 mb-6"></div>
+                            <div className="w-16 h-0.5 bg-[#CC5F30] mx-auto mt-6 mb-6"></div>
                             <p className="text-lg text-slate-600 max-w-3xl mx-auto">
                                 For a confidential discussion about your collection management, transportation, or storage needs,
                                 please contact our London headquarters.
